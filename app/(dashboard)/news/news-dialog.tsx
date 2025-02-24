@@ -24,6 +24,7 @@ import Tiptap from "@/components/Editor/Editor";
 import axios from "axios";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import useAuthStore from "@/store";
 
 interface NewsDialogProps {
   open: boolean;
@@ -45,6 +46,7 @@ export function NewsDialog({
     (defaultValues?.isBreakingNews as boolean) ?? false
   );
   const [loading, setLoading] = useState(false);
+  const {token} = useAuthStore();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -67,7 +69,7 @@ export function NewsDialog({
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
+            Authorization: "Bearer " + token
           },
           withCredentials: true,
         }

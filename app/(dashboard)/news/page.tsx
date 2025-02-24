@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast"
 import { News } from "@/types"
 import axios from "axios";
 import { DataTableColumnHeader } from "@/components/data-table/column-header"
+import useAuthStore from "@/store"
 
 const columns: ColumnDef<News>[] = [
   {
@@ -44,13 +45,14 @@ export default function NewsPage() {
   const [limit, setLimit] = useState(10)
   const [totalPages, setTotalPages] = useState("1")
   const { toast } = useToast()
+  const {token} = useAuthStore();
 
   const fetchData = async () => {
     try{
       const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/news?page=${page}&limit=${limit}`, {
         withCredentials: true,
         headers: {
-          "Authorization": "Bearer " + localStorage.getItem("token") 
+          "Authorization": "Bearer " + token
         }
       })
       const data = response.data
@@ -70,7 +72,7 @@ export default function NewsPage() {
       await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/news`, newNews, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("token") 
+          "Authorization": "Bearer " + token
         },
         withCredentials: true
       })
@@ -91,7 +93,7 @@ export default function NewsPage() {
       await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/news/${updatedNews._id}`, updatedNews, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("token") 
+          "Authorization": "Bearer " + token
         },
         withCredentials: true
       })
@@ -112,7 +114,7 @@ export default function NewsPage() {
       await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/news/${id}`, {
         withCredentials: true,
         headers: {
-          "Authorization": "Bearer " + localStorage.getItem("token") 
+          "Authorization": "Bearer " + token
         }
       })
       toast({

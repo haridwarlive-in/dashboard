@@ -15,6 +15,7 @@ import { Hotel, HotelFormDataType, OwnerFormDataType } from "@/types";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
+import useAuthStore from "@/store";
 
 interface HotelDialogProps {
   open: boolean;
@@ -34,6 +35,8 @@ export function HotelDialog({
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File|null>();
 
+  const {token} = useAuthStore();
+
   useEffect(() => {
     defaultValues ? setFormData(defaultValues) : setFormData({});
   }, [defaultValues]);
@@ -49,7 +52,7 @@ export function HotelDialog({
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
+            Authorization: "Bearer " + token
           },
           withCredentials: true,
         }
@@ -339,7 +342,9 @@ export function HotelDialog({
           </div>
 
           <DialogFooter>
-            <Button type="submit">{defaultValues ? "Update" : "Create"}</Button>
+            <Button type="submit">{
+              loading ? defaultValues ? "Update" : "Create" : "Processing..."
+            }</Button>
           </DialogFooter>
         </form>
       </DialogContent>

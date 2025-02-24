@@ -10,6 +10,7 @@ import { Hotel, Owner, OwnerFormDataType, Temple } from "@/types"
 import axios from "axios";
 import { HotelDialog } from "./hotel-dialog"
 import { DataTableColumnHeader } from "@/components/data-table/column-header"
+import useAuthStore from "@/store"
 
 const columns: ColumnDef<Hotel>[] = [
   {
@@ -33,12 +34,14 @@ export default function TemplePage() {
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null)
   const { toast } = useToast()
 
+  const {token} = useAuthStore();
+
   const fetchData = async () => {
     try{
       const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels`, {
         withCredentials: true,
         headers: {
-          "Authorization": "Bearer " + localStorage.getItem("token") 
+          "Authorization": "Bearer " + token
         }
       })
       const data = response.data
@@ -57,7 +60,7 @@ export default function TemplePage() {
       const hotel = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels`, newHotel, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("token") 
+          "Authorization": "Bearer " + token
         },
         withCredentials: true
       })
@@ -79,7 +82,7 @@ export default function TemplePage() {
       await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels/${updatedHotel._id}`, updatedHotel, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("token") 
+          "Authorization": "Bearer " + token
         },
         withCredentials: true
       })
@@ -101,7 +104,7 @@ export default function TemplePage() {
       await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels/${id}`, {
         withCredentials: true,
         headers: {
-          "Authorization": "Bearer " + localStorage.getItem("token") 
+          "Authorization": "Bearer " + token
         }
       })
       toast({

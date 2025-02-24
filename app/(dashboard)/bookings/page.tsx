@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import useAuthStore from "@/store";
 
 type Booking = {
   _id: string;
@@ -146,7 +147,9 @@ const BookingView = ({
 }) => {
 
   const [status, setStatus] = useState<STATUS | null>(null);
-  const updateStatus = async () => {
+  const {token} = useAuthStore()
+
+   const updateStatus = async () => {
     try {
       await axios.put(
         `${process.env.NEXT_PUBLIC_BASE_URL}/bookings/${booking._id}/status`,
@@ -156,7 +159,7 @@ const BookingView = ({
         {
           withCredentials: true,
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
+            Authorization: "Bearer " + token,
           },
         }
       );

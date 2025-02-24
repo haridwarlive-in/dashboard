@@ -18,6 +18,7 @@ import { Hotel } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { HotelDialog } from "./hotel-dialog";
 import { Edit } from "lucide-react";
+import useAuthStore from "@/store";
 
 type Booking = {
   _id: string;
@@ -95,12 +96,14 @@ export default function BookingsPage() {
   const [bookingViewOpen, setBookingViewOpen] = useState(false);
   const [booking, setBooking] = useState<Booking | null>(null);
 
+  const {token} = useAuthStore();
+
   const fetchData = async () => {
     try {
       const hotelData = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels/${hotelId}`, {
         withCredentials: true,
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: "Bearer " + token,
         },
       });
       const hotel = hotelData.data;
@@ -109,7 +112,7 @@ export default function BookingsPage() {
       const bookings = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/bookings/hotel/${hotelId}`, {
         withCredentials: true,
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: "Bearer " + token
         },
       });
       
@@ -124,7 +127,7 @@ export default function BookingsPage() {
       await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels/${updatedHotel._id}`, updatedHotel, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("token") 
+          "Authorization": "Bearer " + token
         },
         withCredentials: true
       })
@@ -198,6 +201,12 @@ const BookingView = ({
 }) => {
 
   const [status, setStatus] = useState<STATUS | null>(null);
+  const [token, setToken] = useState<string|null>("")
+  
+    useEffect(()=>{
+      if(window != undefined) setToken(localStorage.getItem("token"))
+    }, [])
+  
   const updateStatus = async () => {
     try {
       await axios.put(
@@ -208,7 +217,7 @@ const BookingView = ({
         {
           withCredentials: true,
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
+            Authorization: "Bearer " + token
           },
         }
       );
@@ -228,7 +237,7 @@ const BookingView = ({
       {
         withCredentials: true,
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: "Bearer " + token
         },
       }
     );

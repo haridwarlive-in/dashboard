@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/data-table/column-header";
+import useAuthStore from "@/store";
 
 type Query = {
   id: string;
@@ -45,12 +46,14 @@ export default function QueriesPage() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState<Query | null>(null);
 
+  const {token} = useAuthStore();
+  
   const fetchData = async () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/queries`, {
         withCredentials: true,
         headers: {
-          "Authorization": "Bearer " + localStorage.getItem("token") 
+          "Authorization": "Bearer " + token
         }
       });
       const data = response.data;

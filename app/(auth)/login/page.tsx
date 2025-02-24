@@ -4,12 +4,14 @@ import axios from 'axios';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
+import useAuthStore from '@/store';
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string|null>(null);
+  const { setToken, setAdmin } = useAuthStore();
 
   const router = useRouter()
 
@@ -28,8 +30,8 @@ const SignIn = () => {
 
       if(response.status===200){
         router.push('/hotels')
-        localStorage.setItem("token", response.data.token)
-        localStorage.setItem("admin", "true")
+        setToken(response.data.token)
+        setAdmin(true)
       }
     } catch (err) {
       console.error("Sign-in failed", err);

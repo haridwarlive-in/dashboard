@@ -1,51 +1,55 @@
 "use client"
 
 import { cn } from "@/lib/utils"
+import useAuthStore from "@/store"
 import { Building2, CheckCheck, Hotel, LogInIcon, Newspaper, MessageCircleQuestion as QuestionCircle, BookTemplate as Temple } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { Button } from "./ui/button"
 
-const routes = [
-  {
-    label: 'Hotels',
-    icon: Hotel,
-    href: '/hotels',
-    visible: localStorage.getItem("admin")==="true"
-  },
-  {
-    label: 'Temples',
-    icon: Temple,
-    href: '/temples',
-    visible: localStorage.getItem("admin")==="true"
-  },
-  {
-    label: 'Queries',
-    icon: QuestionCircle,
-    href: '/queries',
-    visible: localStorage.getItem("admin")==="true"
-  },
-  {
-    label: 'News',
-    icon: Newspaper,
-    href: '/news',
-    visible: localStorage.getItem("admin")==="true"
-  },
-  {
-    label: 'Bookings',
-    icon: CheckCheck,
-    href: '/bookings',
-    visible: localStorage.getItem("admin")==="true"
-  },
-  {
-    label: 'Hotel Login',
-    icon: LogInIcon,
-    href: '/hotelBooking',
-    visible: true
-  },
-]
 
 export function MainNav() {
   const pathname = usePathname()
+  const {admin, token, clearToken, setAdmin} = useAuthStore()
+  console.log(token, admin)
+  const routes = [
+    {
+      label: 'Hotels',
+      icon: Hotel,
+      href: '/hotels',
+      visible: admin
+    },
+    {
+      label: 'Temples',
+      icon: Temple,
+      href: '/temples',
+      visible: admin
+    },
+    {
+      label: 'Queries',
+      icon: QuestionCircle,
+      href: '/queries',
+      visible: admin
+    },
+    {
+      label: 'News',
+      icon: Newspaper,
+      href: '/news',
+      visible: admin
+    },
+    {
+      label: 'Bookings',
+      icon: CheckCheck,
+      href: '/bookings',
+      visible: admin
+    },
+    {
+      label: 'Hotel Login',
+      icon: LogInIcon,
+      href: '/hotelBooking',
+      visible: true
+    },
+  ]
 
   return (
     <div className="flex flex-col gap-4">
@@ -71,7 +75,18 @@ export function MainNav() {
             {route.label}
           </Link>
         ))}
+        {admin && 
+        <div className="p-4">
+          <Link href={"/login"}><Button 
+          onClick={()=>{
+            clearToken()
+            setAdmin(false)
+          }}
+          variant="destructive">Logout</Button></Link>
+        </div>}
       </nav>
+
+      
     </div>
   )
 }

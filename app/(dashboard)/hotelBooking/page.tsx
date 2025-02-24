@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
+import useAuthStore from '@/store';
 
 const HotelLogin = () => {
   const [email, setEmail] = useState("");
@@ -12,6 +13,7 @@ const HotelLogin = () => {
   const [error, setError] = useState<string|null>(null);
 
   const router = useRouter()
+  const {setToken} = useAuthStore()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +32,7 @@ const HotelLogin = () => {
 
       if(response.status==200){
         router.push(`hotelBooking/${hotel[0]._id}`)
-        localStorage.setItem("token", token)
+        setToken(token)
       }
     } catch (err) {
       console.error("Sign-in failed", err);
