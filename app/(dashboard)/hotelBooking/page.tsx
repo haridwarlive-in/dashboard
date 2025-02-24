@@ -19,7 +19,7 @@ const HotelLogin = () => {
     setError(null);
 
     try {
-      const response = await axios.post(`http://localhost:5001/api/hotels/auth`, { email, password }, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels/auth`, { email, password }, {
         headers:{
           'Content-Type': 'application/json'
         },

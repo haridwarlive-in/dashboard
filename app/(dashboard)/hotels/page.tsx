@@ -35,7 +35,7 @@ export default function TemplePage() {
 
   const fetchData = async () => {
     try{
-      const response = await axios.get(`http://localhost:5001/api/hotels`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels`, {
         withCredentials: true,
         headers: {
           "Authorization": "Bearer " + localStorage.getItem("token") 
@@ -54,7 +54,7 @@ export default function TemplePage() {
 
   const handleCreate = async (newHotel: Omit<Hotel, "id" | "createdAt">) => {
     try{
-      const hotel = await axios.post(`http://localhost:5001/api/hotels`, newHotel, {
+      const hotel = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels`, newHotel, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + localStorage.getItem("token") 
@@ -76,7 +76,7 @@ export default function TemplePage() {
 
   const handleUpdate = async (updatedHotel: Hotel) => {
     try{
-      await axios.put(`http://localhost:5001/api/hotels/${updatedHotel._id}`, updatedHotel, {
+      await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels/${updatedHotel._id}`, updatedHotel, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + localStorage.getItem("token") 
@@ -98,7 +98,7 @@ export default function TemplePage() {
 
   const handleDelete = async (id: string) => {
     try{
-      await axios.delete(`http://localhost:5001/api/hotels/${id}`, {
+      await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels/${id}`, {
         withCredentials: true,
         headers: {
           "Authorization": "Bearer " + localStorage.getItem("token") 

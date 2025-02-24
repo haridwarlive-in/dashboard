@@ -89,7 +89,7 @@ export default function BookingsPage() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://localhost:5001/api/bookings`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/bookings`, {
         withCredentials: true,
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
@@ -149,7 +149,7 @@ const BookingView = ({
   const updateStatus = async () => {
     try {
       await axios.put(
-        `http://localhost:5001/api/bookings/${booking._id}/status`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/bookings/${booking._id}/status`,
         {
           status,
         },
@@ -172,7 +172,7 @@ const BookingView = ({
   const handleDelete = async () => {
     try {
       await axios.delete(
-      `http://localhost:5001/api/bookings/${booking._id}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/bookings/${booking._id}`,
       {
         withCredentials: true,
         headers: {

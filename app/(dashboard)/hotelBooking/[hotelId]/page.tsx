@@ -121,7 +121,7 @@ export default function BookingsPage() {
 
   const handleUpdate = async (updatedHotel: Hotel) => {
     try{
-      await axios.put(`http://localhost:5001/api/hotels/${updatedHotel._id}`, updatedHotel, {
+      await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels/${updatedHotel._id}`, updatedHotel, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + localStorage.getItem("token") 

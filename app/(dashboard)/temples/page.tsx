@@ -36,7 +36,7 @@ export default function TemplePage() {
 
   const fetchData = async () => {
     try{
-      const response = await axios.get(`http://localhost:5001/api/temples`)
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/temples`)
       const data = response.data
       
       setData(data)
@@ -51,7 +51,7 @@ export default function TemplePage() {
 
   const handleCreate = async (newTemple: Omit<Temple, "id" | "createdAt">) => {
     try{
-      await axios.post(`http://localhost:5001/api/temples`, newTemple, {
+      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/temples`, newTemple, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + localStorage.getItem("token") 
@@ -76,7 +76,7 @@ export default function TemplePage() {
 
   const handleUpdate = async (updatedTemple: Temple) => {
     try{
-      await axios.put(`http://localhost:5001/api/temples/${updatedTemple._id}`, updatedTemple, {
+      await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/temples/${updatedTemple._id}`, updatedTemple, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + localStorage.getItem("token") 
@@ -97,7 +97,7 @@ export default function TemplePage() {
 
   const handleDelete = async (id: string) => {
     try{
-      await axios.delete(`http://localhost:5001/api/temples/${id}`, {
+      await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/temples/${id}`, {
         headers: {
           "Authorization": "Bearer " + localStorage.getItem("token") 
         },
