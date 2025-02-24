@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Temple } from "@/types"
 import axios from "axios";
 import { DataTableColumnHeader } from "@/components/data-table/column-header"
+import useAuthStore from "@/store"
 
 const columns: ColumnDef<Temple>[] = [
   {
@@ -33,6 +34,7 @@ export default function TemplePage() {
   const [open, setOpen] = useState(false)
   const [selectedTemple, setSelectedTemple] = useState<Temple | null>(null)
   const { toast } = useToast()
+  const {token} = useAuthStore();
 
   const fetchData = async () => {
     try{
@@ -54,7 +56,7 @@ export default function TemplePage() {
       await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/temples`, newTemple, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("token") 
+          "Authorization": "Bearer " + token
         },
         withCredentials: true
       })
@@ -79,7 +81,7 @@ export default function TemplePage() {
       await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/temples/${updatedTemple._id}`, updatedTemple, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("token") 
+          "Authorization": "Bearer " + token
         },
         withCredentials: true
       })
@@ -99,7 +101,7 @@ export default function TemplePage() {
     try{
       await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/temples/${id}`, {
         headers: {
-          "Authorization": "Bearer " + localStorage.getItem("token") 
+          "Authorization": "Bearer " + token
         },
         withCredentials: true
       })

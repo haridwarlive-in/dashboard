@@ -87,13 +87,13 @@ export default function BookingsPage() {
   const [data, setData] = useState<Booking[]>([]);
   const [open, setOpen] = useState(false);
   const [booking, setBooking] = useState<Booking | null>(null);
-
+  const {token} = useAuthStore();
   const fetchData = async () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/bookings`, {
         withCredentials: true,
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: "Bearer " + token
         },
       });
       const data = response.data;
