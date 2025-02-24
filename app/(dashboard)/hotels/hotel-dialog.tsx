@@ -343,7 +343,7 @@ export function HotelDialog({
 
           <DialogFooter>
             <Button type="submit">{
-              loading ? defaultValues ? "Update" : "Create" : "Processing..."
+              loading ? "Processing..." : defaultValues ? "Update" : "Create"
             }</Button>
           </DialogFooter>
         </form>
