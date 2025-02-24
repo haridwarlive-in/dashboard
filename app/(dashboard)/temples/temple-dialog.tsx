@@ -16,6 +16,7 @@ import { DialogDescription } from "@radix-ui/react-dialog";
 import Tiptap from "@/components/Editor/Editor";
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
+import useAuthStore from "@/store";
 
 interface TempleDialogProps {
   open: boolean;
@@ -34,6 +35,7 @@ export function TempleDialog({
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [selectedFile, setSelectedFile] = useState<File|null>();
+  const {token} = useAuthStore();
 
   useEffect(() => {
     defaultValues ? setFormData(defaultValues) : setFormData({});
@@ -50,7 +52,7 @@ export function TempleDialog({
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
+            Authorization: "Bearer " + token
           },
           withCredentials: true,
         }
