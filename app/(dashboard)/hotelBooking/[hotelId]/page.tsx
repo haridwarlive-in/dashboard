@@ -201,11 +201,7 @@ const BookingView = ({
 }) => {
 
   const [status, setStatus] = useState<STATUS | null>(null);
-  const [token, setToken] = useState<string|null>("")
-  
-    useEffect(()=>{
-      if(window != undefined) setToken(localStorage.getItem("token"))
-    }, [])
+  const {token} = useAuthStore();
   
   const updateStatus = async () => {
     try {
