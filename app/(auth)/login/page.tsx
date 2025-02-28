@@ -30,9 +30,9 @@ const SignIn = () => {
 
       if(response.status===200){
         router.push('/news')
-        setToken(response.data.token)
+        setToken(response.data.token);
         const jwtToken = await decode(response.data.token);
-        setAdmin((jwtToken as JwtPayload)?.isAdmin)
+        setAdmin((jwtToken as JwtPayload)?.isAdmin);
 
         const isCollaborator = (jwtToken as JwtPayload).id !== "6797d53f79ead4df18b65120"
         setCollaborator(isCollaborator)
