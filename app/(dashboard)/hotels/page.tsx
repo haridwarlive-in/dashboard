@@ -11,6 +11,7 @@ import axios from "axios";
 import { HotelDialog } from "./hotel-dialog"
 import { DataTableColumnHeader } from "@/components/data-table/column-header"
 import useAuthStore from "@/store"
+import { redirect } from "next/navigation"
 
 const columns: ColumnDef<Hotel>[] = [
   {
@@ -28,13 +29,13 @@ const columns: ColumnDef<Hotel>[] = [
   },
 ]
 
-export default function TemplePage() {
+export default function HotelsPage() {
   const [data, setData] = useState<Hotel[]>([])
   const [open, setOpen] = useState(false)
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null)
   const { toast } = useToast()
 
-  const {token} = useAuthStore();
+  const {token, collaborator} = useAuthStore();
 
   const fetchData = async () => {
     try{
@@ -53,7 +54,12 @@ export default function TemplePage() {
   
   useEffect(() => {
     fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  if(collaborator) {
+    redirect('/login')
+  };
 
   const handleCreate = async (newHotel: Omit<Hotel, "id" | "createdAt">) => {
     try{

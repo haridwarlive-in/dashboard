@@ -11,6 +11,7 @@ import { News } from "@/types"
 import axios from "axios";
 import { DataTableColumnHeader } from "@/components/data-table/column-header"
 import useAuthStore from "@/store"
+import { useRouter } from "next/navigation"
 
 const columns: ColumnDef<News>[] = [
   {
@@ -45,7 +46,9 @@ export default function NewsPage() {
   const [limit, setLimit] = useState(10)
   const [totalPages, setTotalPages] = useState("1")
   const { toast } = useToast()
-  const {token} = useAuthStore();
+  
+  const { token } = useAuthStore();
+  
 
   const fetchData = async () => {
     try{
@@ -62,10 +65,13 @@ export default function NewsPage() {
       console.error(error)
     }
   }
+
   useEffect(() => {
     fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, limit])
+
+  if(!token) return null;
 
   const handleCreate = async (newNews: Omit<News, "id" | "createdAt">) => {
     try{

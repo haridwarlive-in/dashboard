@@ -7,6 +7,7 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/data-table/column-header";
 import useAuthStore from "@/store";
+import { redirect } from "next/navigation";
 
 type Query = {
   id: string;
@@ -65,7 +66,10 @@ export default function QueriesPage() {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (!token) return null;
 
   return (
     <div className="space-y-4">
@@ -106,8 +110,8 @@ const QueryView = ({
         open ? "flex" : "hidden"
       }`}
     >
-      <div className="flex flex-col gap-2 w-auto max-h-[500px] rounded-lg bg-gray-50 shadow-xl border p-4 [&>div]:p-1 [&>div]:rounded-lg">
-        {query.createdAt ? <div>{query.createdAt}</div> : null}
+      <div className="flex flex-col gap-2 w-auto max-h-[90vh] min-w-[500px] max-w-[80vw] shadow rounded-sm bg-white border p-4 [&>div]:p-1 [&>div]:rounded-lg">
+        {query.createdAt ? <div>{new Date(query.createdAt).toLocaleDateString()}</div> : null}
         <strong>Name</strong>
         <div>{query.name}</div>
         <strong>Email</strong>

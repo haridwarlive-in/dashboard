@@ -5,14 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
 import useAuthStore from '@/store';
+import { decode, JwtPayload } from 'jsonwebtoken';
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string|null>(null);
-  const { setToken, setAdmin } = useAuthStore();
-
+  const { setToken, setAdmin, setCollaborator } = useAuthStore();
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,9 +29,14 @@ const SignIn = () => {
       });
 
       if(response.status===200){
-        router.push('/hotels')
+        router.push('/news')
         setToken(response.data.token)
-        setAdmin(true)
+        const jwtToken = await decode(response.data.token);
+        setAdmin((jwtToken as JwtPayload)?.isAdmin)
+
+        const isCollaborator = (jwtToken as JwtPayload).id !== "6797d53f79ead4df18b65120"
+        setCollaborator(isCollaborator)
+  
       }
     } catch (err) {
       console.error("Sign-in failed", err);

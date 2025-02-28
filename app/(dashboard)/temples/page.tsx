@@ -11,6 +11,7 @@ import { Temple } from "@/types"
 import axios from "axios";
 import { DataTableColumnHeader } from "@/components/data-table/column-header"
 import useAuthStore from "@/store"
+import { redirect } from "next/navigation"
 
 const columns: ColumnDef<Temple>[] = [
   {
@@ -30,10 +31,11 @@ const columns: ColumnDef<Temple>[] = [
 
 
 export default function TemplePage() {
+
   const [data, setData] = useState<Temple[]>([])
   const [open, setOpen] = useState(false)
   const [selectedTemple, setSelectedTemple] = useState<Temple | null>(null)
-  const { toast } = useToast()
+  const { toast } = useToast();
   const {token} = useAuthStore();
 
   const fetchData = async () => {
@@ -50,6 +52,8 @@ export default function TemplePage() {
   useEffect(() => {
     fetchData()
   }, [])
+
+  if(!token) return null;
 
   const handleCreate = async (newTemple: Omit<Temple, "id" | "createdAt">) => {
     try{

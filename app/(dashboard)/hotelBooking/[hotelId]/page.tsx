@@ -84,6 +84,7 @@ const columns: ColumnDef<Booking>[] = [
   },
 ];
 
+
 export default function BookingsPage() {
   const params = useParams();
   const hotelId = params.hotelId;
@@ -98,6 +99,7 @@ export default function BookingsPage() {
 
   const {token} = useAuthStore();
 
+  
   const fetchData = async () => {
     try {
       const hotelData = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels/${hotelId}`, {
@@ -118,10 +120,10 @@ export default function BookingsPage() {
       
       setData(bookings.data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
-
+  
   const handleUpdate = async (updatedHotel: Hotel) => {
     try{
       await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels/${updatedHotel._id}`, updatedHotel, {
@@ -145,9 +147,32 @@ export default function BookingsPage() {
   }
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const hotelData = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/hotels/${hotelId}`, {
+          withCredentials: true,
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+        const hotel = hotelData.data;
+        setHotel(hotel)
+  
+        const bookings = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/bookings/hotel/${hotelId}`, {
+          withCredentials: true,
+          headers: {
+            Authorization: "Bearer " + token
+          },
+        });
+        
+        setData(bookings.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  
+  }, [hotelId, token]);
 
   return (
     <div className="space-y-4">

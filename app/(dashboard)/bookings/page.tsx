@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useAuthStore from "@/store";
+import { redirect } from "next/navigation"
 
 type Booking = {
   _id: string;
@@ -84,28 +85,35 @@ const columns: ColumnDef<Booking>[] = [
 ];
 
 export default function BookingsPage() {
+
   const [data, setData] = useState<Booking[]>([]);
   const [open, setOpen] = useState(false);
   const [booking, setBooking] = useState<Booking | null>(null);
-  const {token} = useAuthStore();
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/bookings`, {
-        withCredentials: true,
-        headers: {
-          Authorization: "Bearer " + token
-        },
-      });
-      const data = response.data;
-      setData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const {token, collaborator} = useAuthStore();
+  
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/bookings`, {
+          withCredentials: true,
+          headers: {
+            Authorization: "Bearer " + token
+          },
+        });
+        const data = response.data;
+        setData(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     fetchData();
-  }, []);
+  }, [token]);
+
+  if(collaborator) {
+    redirect('/login')
+  };
 
   return (
     <div className="space-y-4">
@@ -126,7 +134,7 @@ export default function BookingsPage() {
         open={open}
         setOpen={setOpen}
         booking={booking as Booking}
-        fetchData={fetchData}
+        setData={setData}
       />
     </div>
   );
@@ -138,13 +146,28 @@ const BookingView = ({
   open,
   setOpen,
   booking,
-  fetchData,
+  setData
 }: {
   open: boolean;
   setOpen: (x: boolean) => void;
   booking: Booking;
-  fetchData: () => void;
+  setData: (x: any) => void
 }) => {
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/bookings`, {
+        withCredentials: true,
+        headers: {
+          Authorization: "Bearer " + token
+        },
+      });
+      const data = response.data;
+      setData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const [status, setStatus] = useState<STATUS | null>(null);
   const {token} = useAuthStore()

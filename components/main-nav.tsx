@@ -6,48 +6,49 @@ import { Building2, CheckCheck, Hotel, LogInIcon, Newspaper, MessageCircleQuesti
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "./ui/button"
+import axios from "axios"
 
 
 export function MainNav() {
   const pathname = usePathname()
-  const {admin, token, clearToken, setAdmin} = useAuthStore()
-  console.log(token, admin)
+  const {admin, clearToken, setAdmin, collaborator, setCollaborator} = useAuthStore()
+
   const routes = [
     {
       label: 'Hotels',
       icon: Hotel,
       href: '/hotels',
-      visible: admin
+      visible: admin 
     },
     {
       label: 'Temples',
       icon: Temple,
       href: '/temples',
-      visible: admin
+      visible: admin || collaborator
     },
     {
       label: 'Queries',
       icon: QuestionCircle,
       href: '/queries',
-      visible: admin
+      visible: admin || collaborator
     },
     {
       label: 'News',
       icon: Newspaper,
       href: '/news',
-      visible: admin
+      visible: admin || collaborator
     },
     {
       label: 'Bookings',
       icon: CheckCheck,
       href: '/bookings',
-      visible: admin
+      visible: admin 
     },
     {
       label: 'Hotel Login',
       icon: LogInIcon,
       href: '/hotelBooking',
-      visible: true
+      visible: !collaborator
     },
   ]
 
@@ -62,7 +63,9 @@ export function MainNav() {
       
       <nav className="flex flex-col gap-2 px-2">
         {routes.map((route) => (
-          <Link
+          
+            (admin || collaborator) 
+            ? <Link
             key={route.href}
             href={route.href}
             className={cn(
@@ -74,16 +77,24 @@ export function MainNav() {
             <route.icon className="h-5 w-5" />
             {route.label}
           </Link>
+          : (!admin && !collaborator) 
+            ? <span key={route.href}></span>
+            : <div key={route.href} className="bg-gray-100 rounded-lg w-full h-10"></div>
         ))}
-        {admin && 
+         
         <div className="p-4">
-          <Link href={"/login"}><Button 
-          onClick={()=>{
+          <Link href={(!admin && !collaborator) ? "/hotelBooking" : "/login"}><Button 
+          onClick={async ()=>{
+            await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/logout`, {
+              withCredentials: true
+            })
             clearToken()
             setAdmin(false)
+            setCollaborator(false)
+
           }}
           variant="destructive">Logout</Button></Link>
-        </div>}
+        </div>
       </nav>
 
       
