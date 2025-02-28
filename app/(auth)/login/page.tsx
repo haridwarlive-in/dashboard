@@ -34,7 +34,7 @@ const SignIn = () => {
         const jwtToken = await decode(response.data.token);
         setAdmin((jwtToken as JwtPayload)?.isAdmin);
 
-        const isCollaborator = (jwtToken as JwtPayload).id !== "6797d53f79ead4df18b65120"
+        const isCollaborator = (jwtToken as JwtPayload).id !== "67bdd837bc8d24bd5cb4f32d"
         setCollaborator(isCollaborator)
   
       }
