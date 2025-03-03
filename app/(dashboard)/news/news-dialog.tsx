@@ -189,7 +189,7 @@ export function NewsDialog({
           <div className="space-y-2">
             <Label htmlFor="content">Content</Label>
 
-            <div className="border rounded-md p-1 h-[300px] overflow-scroll">
+            <div className="border rounded-md p-1 min-h-[600px] overflow-scroll">
               <Tiptap
                 isNewsForm={true}
                 content={defaultValues ? formData.content : content}

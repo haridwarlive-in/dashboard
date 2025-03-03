@@ -69,6 +69,7 @@ export interface NewsFormDataType {
   date: Date;
   tags: string[];
   image: string;
+  videoUrl: string
 }
 
 export interface TempleFormDataType {
