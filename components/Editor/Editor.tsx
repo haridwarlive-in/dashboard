@@ -44,7 +44,7 @@ const uploadImageToS3 = async (file: File, token: string): Promise<string | null
     const { uploadURL, key } = response.data;
     await axios.put(uploadURL, file, { headers: { "Content-Type": file.type } });
 
-    return `https://https://haridwar-live.s3.ap-south-1.amazonaws.com/${key}`;
+    return `https://haridwarlive-storage.s3.ap-south-1.amazonaws.com/${key}`;
   } catch (error) {
     console.error("Image upload failed:", error);
     return null;
