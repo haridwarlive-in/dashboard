@@ -140,6 +140,19 @@ export function NewsDialog({
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
+            <Label htmlFor="author">Author</Label>
+            <Input
+              id="author"
+              defaultValue={formData.author}
+              onChange={(e) =>
+                setFormData({ ...formData, author: e.target.value })
+              }
+              placeholder="Enter Author name"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="title">Title</Label>
             <Input
               id="title"
@@ -148,6 +161,22 @@ export function NewsDialog({
                 setFormData({ ...formData, title: e.target.value })
               }
               placeholder="Enter news title"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="title">English Title for URL</Label>
+            <Input
+              id="title"
+              defaultValue={formData.urlTitle}
+              onChange={(e) => {
+                
+                const value = e.target.value
+                const title = value.trim().toLowerCase().replace(/\s+/g, '-').replace(/\.-/g, '-');
+                setFormData({ ...formData, urlTitle: title })
+              }}
+              placeholder="Enter title for url in english"
               required
             />
           </div>
