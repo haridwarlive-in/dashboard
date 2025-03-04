@@ -123,12 +123,10 @@ const uploadFileToS3 = async (
 
 export const MenuBar = ({
   editor,
-  setPreviewOpen,
   triggerImageUpload,
   triggerVideoUpload,
 }: {
   editor: Editor;
-  setPreviewOpen: (x: boolean) => void;
   triggerImageUpload: () => void;
   triggerVideoUpload: () => void;
 }) => {
@@ -204,13 +202,7 @@ export const MenuBar = ({
         <Button type="button" variant="outline" onClick={triggerVideoUpload}>
           <VideoIcon size={16} />
         </Button>
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => setPreviewOpen(true)}
-        >
-          Preview
-        </Button>
+        
       </div>
     </div>
   );
@@ -229,7 +221,6 @@ const Tiptap = ({
   setFormData: (x: NewsFormDataType | TempleFormDataType) => void;
   isNewsForm?: boolean;
 }) => {
-  const [previewOpen, setPreviewOpen] = React.useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const { token } = useAuthStore();
@@ -280,7 +271,6 @@ const Tiptap = ({
     <div>
       <MenuBar
         editor={editor as Editor}
-        setPreviewOpen={setPreviewOpen}
         triggerImageUpload={() => imageInputRef.current?.click()}
         triggerVideoUpload={() => videoInputRef.current?.click()}
       />
