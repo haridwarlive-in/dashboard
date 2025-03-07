@@ -19,6 +19,7 @@ import {
   ListOrdered,
   ImageIcon,
   VideoIcon,
+  X,
 } from "lucide-react";
 import StarterKit from "@tiptap/starter-kit";
 import React, { useRef } from "react";
@@ -334,21 +335,22 @@ const XHandleComponent = (props: any) => {
   const handle = props.node.attrs.handle;
   return (
     <a
-      href={`https://twitter.com/${handle}`}
+      href={`https://x.com/${handle}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-blue-500 font-semibold"
+      className="flex items-center gap-2 px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
     >
-      {handle}
+      <X size={20} />
+      <span>@{handle}</span>
     </a>
   );
 };
 
 const XHandle = Node.create({
   name: "xHandle",
-  group: "inline", // Makes it inline with text
-  inline: true,
-  atom: true, // Makes it non-editable
+  group: "block", // Block element (new line)
+  inline: false,
+  atom: true, // Non-editable
 
   addAttributes() {
     return {
@@ -357,22 +359,22 @@ const XHandle = Node.create({
   },
 
   parseHTML() {
-    return [{ tag: "span[data-x-handle]" }];
+    return [{ tag: "div[data-x-handle]" }];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["span", mergeAttributes(HTMLAttributes, { "data-x-handle": true })];
+    return ["div", mergeAttributes(HTMLAttributes, { "data-x-handle": true })];
   },
 
   addNodeView() {
     return ReactNodeViewRenderer(XHandleComponent);
   },
 
-  addCommands(): Partial<RawCommands & CustomCommands> {
+  addCommands() {
     return {
       insertXHandle:
         (handle: string) =>
-        ({ chain }) => {
+        ({ chain }: CommandProps) => {
           return chain()
             .insertContent({
               type: "xHandle",
@@ -383,8 +385,5 @@ const XHandle = Node.create({
     };
   },
 });
-
-
-
 
 export default Tiptap;
