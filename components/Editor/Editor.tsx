@@ -212,7 +212,7 @@ export const MenuBar = ({
         <Button
           type="button"
           variant="outline"
-          onClick={() => editor?.chain().focus().insertXHandle("@elonmusk").run()}
+          onClick={() => editor.chain().focus().insertXHandle("https://twitter.com/AnupamPKher/status/1897678724620787902").run()}
         >
           Insert X Handle
         </Button>
@@ -331,65 +331,61 @@ const Tiptap = ({
   );
 };
 
-const XHandleComponent = (props: any) => {
-  const handle = props.node.attrs.handle;
+const XEmbedComponent = (props: any) => {
+  const tweetUrl = props.node.attrs.tweetUrl;
+
   return (
-    <a
-      href={`https://x.com/${handle}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-center gap-2 px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-    >
-      <X size={20} />
-      <span>@{handle}</span>
-    </a>
+    <div className="my-4">
+      <blockquote className="twitter-tweet">
+        <a href={tweetUrl}></a>
+      </blockquote>
+      <script async src="https://platform.twitter.com/widgets.js"></script>
+    </div>
   );
 };
 
 const XHandle = Node.create({
   name: "xHandle",
   group: "block", // Block element (new line)
-  inline: false,
   atom: true, // Non-editable
 
   addAttributes() {
     return {
-      handle: { default: "" },
+      tweetUrl: { default: "" },
     };
   },
 
   parseHTML() {
-    return [{ tag: "div[data-x-handle]" }];
+    return [{ tag: "div[data-x-embed]" }];
   },
 
   renderHTML({ HTMLAttributes }) {
     return [
-      "a",
+      "div",
       mergeAttributes(HTMLAttributes, {
-        href: `https://twitter.com/haridwarlive.in`,
-        target: "_blank",
-        rel: "noopener noreferrer",
-        "data-x-handle": true,
-        style: "display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; margin: 8px 4px; background-color: #1D9BF0; color: white; border-radius: 8px; text-decoration: none; font-weight: bold;",
+        "data-x-embed": true,
+        style: "margin: 10px 0;",
       }),
-      `<X size={20} />`,
-      `Follow on X: @haridwarlive.in`,
+      `<blockquote class="twitter-tweet">
+        <a href="${HTMLAttributes.tweetUrl}"></a>
+      </blockquote>
+      <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
     ];
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(XHandleComponent);
+    return ReactNodeViewRenderer(XEmbedComponent);
   },
 
   addCommands() {
     return {
       insertXHandle:
-        (handle: string) =>
+        (tweetUrl: string) =>
         ({ chain }: CommandProps) => {
           return chain()
             .insertContent({
               type: "xHandle",
-              attrs: { handle },
+              attrs: { tweetUrl },
             })
             .run();
         },
