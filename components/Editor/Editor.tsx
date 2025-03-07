@@ -71,7 +71,7 @@ const Video = Node.create({
       "video",
       mergeAttributes(HTMLAttributes, {
         controls: true,
-        class: "w-full rounded-md my-2",
+        class: "w-1/2 rounded-md my-2 space-y-2",
       }),
     ];
   },
