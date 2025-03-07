@@ -363,7 +363,21 @@ const XHandle = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["div", mergeAttributes(HTMLAttributes, { "data-x-handle": true })];
+    return [
+      "a",
+      mergeAttributes(HTMLAttributes, {
+        href: `https://twitter.com/${node.attrs.handle}`,
+        target: "_blank",
+        rel: "noopener noreferrer",
+        "data-x-handle": true,
+        style: "display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; background-color: #1D9BF0; color: white; border-radius: 8px; text-decoration: none; font-weight: bold;",
+      }),
+      ["svg", 
+        { xmlns: "http://www.w3.org/2000/svg", width: "16", height: "16", viewBox: "0 0 24 24", fill: "white" },
+        ["path", { d: "M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm8.24 5.2l-1.52 1.8 2.08 2.44h-2.04L12 12.24l-1.76 2.2H8.12l2.12-2.4-1.52-1.8H11l1-1.24 1.08 1.24h2.16z" }]
+      ],
+      `Follow on X: @haridwarlive.in`,
+    ];
   },
 
   addNodeView() {
