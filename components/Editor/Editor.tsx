@@ -225,7 +225,7 @@ export const MenuBar = ({
           variant="outline"
           onClick={() => {
             const url = prompt("Enter Tweet URL: ");
-            editor.chain().focus().insertXHandle(url).run()
+            editor.chain().focus().insertXHandle(url as string).run()
           }}
         >
           Insert X Handle
