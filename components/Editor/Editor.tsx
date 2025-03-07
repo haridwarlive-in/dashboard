@@ -366,7 +366,7 @@ const XHandle = Node.create({
     return [
       "a",
       mergeAttributes(HTMLAttributes, {
-        href: `https://twitter.com/${node.attrs.handle}`,
+        href: `https://twitter.com/haridwarlive.in`,
         target: "_blank",
         rel: "noopener noreferrer",
         "data-x-handle": true,
