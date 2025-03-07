@@ -8,6 +8,7 @@ import Underline from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
 import Paragraph from "@tiptap/extension-paragraph";
 import Image from "@tiptap/extension-image";
+import { ReactNodeViewRenderer } from "@tiptap/react";
 import {
   Bold,
   Italic,
@@ -39,15 +40,20 @@ import {
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     insertVideo: (src: string) => ReturnType;
+    xHandle: {
+      insertXHandle: (handle: string) => ReturnType;
+    };
   }
 
   interface CustomChainedCommands {
     insertVideo: (src: string) => CustomChainedCommands;
+    insertXHandle: (src: string) => CustomChainedCommands;
   }
 }
 
 interface CustomCommands extends RawCommands {
   insertVideo: (src: string) => (props: CommandProps) => boolean;
+  insertXHandle: (src: string) => (props: CommandProps) => boolean;
 }
 
 
@@ -202,7 +208,13 @@ export const MenuBar = ({
         <Button type="button" variant="outline" onClick={triggerVideoUpload}>
           <VideoIcon size={16} />
         </Button>
-        
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => editor?.chain().focus().insertXHandle("@elonmusk").run()}
+        >
+          Insert X Handle
+        </Button>
       </div>
     </div>
   );
@@ -260,6 +272,7 @@ const Tiptap = ({
       Underline,
       Paragraph,
       CustomImage,
+      XHandle
     ],
     autofocus: true,
     content,
@@ -316,5 +329,62 @@ const Tiptap = ({
     </div>
   );
 };
+
+const XHandleComponent = (props: any) => {
+  const handle = props.node.attrs.handle;
+  return (
+    <a
+      href={`https://twitter.com/${handle}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-500 font-semibold"
+    >
+      {handle}
+    </a>
+  );
+};
+
+const XHandle = Node.create({
+  name: "xHandle",
+  group: "inline", // Makes it inline with text
+  inline: true,
+  atom: true, // Makes it non-editable
+
+  addAttributes() {
+    return {
+      handle: { default: "" },
+    };
+  },
+
+  parseHTML() {
+    return [{ tag: "span[data-x-handle]" }];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return ["span", mergeAttributes(HTMLAttributes, { "data-x-handle": true })];
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(XHandleComponent);
+  },
+
+  addCommands(): Partial<RawCommands & CustomCommands> {
+    return {
+      insertXHandle:
+        (handle: string) =>
+        ({ chain }) => {
+          return chain()
+            .insertContent({
+              type: "xHandle",
+              attrs: { handle },
+            })
+            .run();
+        },
+    };
+  },
+});
+
+
+
 
 export default Tiptap;
