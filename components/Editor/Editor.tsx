@@ -9,6 +9,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import Paragraph from "@tiptap/extension-paragraph";
 import Image from "@tiptap/extension-image";
 import { ReactNodeViewRenderer } from "@tiptap/react";
+import { NodeViewWrapper } from "@tiptap/react";
 import {
   Bold,
   Italic,
@@ -22,7 +23,7 @@ import {
   X,
 } from "lucide-react";
 import StarterKit from "@tiptap/starter-kit";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./editor.scss";
 import { Toggle } from "../ui/toggle";
 import { Button } from "../ui/button";
@@ -55,6 +56,16 @@ declare module "@tiptap/core" {
 interface CustomCommands extends RawCommands {
   insertVideo: (src: string) => (props: CommandProps) => boolean;
   insertXHandle: (src: string) => (props: CommandProps) => boolean;
+}
+
+declare global {
+  interface Window {
+    twttr?: {
+      widgets: {
+        load: () => void;
+      };
+    };
+  }
 }
 
 
@@ -212,7 +223,10 @@ export const MenuBar = ({
         <Button
           type="button"
           variant="outline"
-          onClick={() => editor.chain().focus().insertXHandle("https://twitter.com/AnupamPKher/status/1897678724620787902").run()}
+          onClick={() => {
+            const url = prompt("Enter Tweet URL: ");
+            editor.chain().focus().insertXHandle(url).run()
+          }}
         >
           Insert X Handle
         </Button>
@@ -278,6 +292,7 @@ const Tiptap = ({
     autofocus: true,
     content,
     onBlur({ editor }) {
+      console.log(content)
       setContent(editor.getHTML());
       setFormData(
         isNewsForm
@@ -334,13 +349,19 @@ const Tiptap = ({
 const XEmbedComponent = (props: any) => {
   const tweetUrl = props.node.attrs.tweetUrl;
 
+  useEffect(() => {
+    // Wait for the component to mount, then load Twitter widgets
+    if (window.twttr && window.twttr.widgets) {
+      window.twttr.widgets.load();
+    }
+  }, []);
+
   return (
-    <div className="my-4">
+    <NodeViewWrapper className="my-4">
       <blockquote className="twitter-tweet">
         <a href={tweetUrl}></a>
       </blockquote>
-      <script async src="https://platform.twitter.com/widgets.js"></script>
-    </div>
+    </NodeViewWrapper>
   );
 };
 
@@ -365,16 +386,11 @@ const XHandle = Node.create({
 
   renderHTML({ HTMLAttributes }) {
     return [
-      "div",
+      "blockquote",
       mergeAttributes(HTMLAttributes, {
-        "data-x-embed": true,
-        style: "margin: 10px 0;",
+        class: "twitter-tweet",
       }),
-      
-      `<blockquote class="twitter-tweet">
-        <a href="${HTMLAttributes.tweetUrl}"></a>
-      </blockquote>
-      <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+      ["a", { href: HTMLAttributes.tweetUrl }, ""], // Properly formatted <a> tag
     ];
   },
 
