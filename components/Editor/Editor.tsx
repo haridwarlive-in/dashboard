@@ -208,6 +208,18 @@ export const MenuBar = ({
   );
 };
 
+const CustomImage = Image.extend({
+  renderHTML({ HTMLAttributes }) {
+    return [
+      "img",
+      {
+        ...HTMLAttributes,
+        class: "my-4", // Adds vertical margin (Tailwind utility for spacing)
+      },
+    ];
+  },
+});
+
 const Tiptap = ({
   content,
   setContent,
@@ -235,7 +247,7 @@ const Tiptap = ({
       HorizontalRule,
       Underline,
       Paragraph,
-      Image,
+      CustomImage,
     ],
     autofocus: true,
     content,
