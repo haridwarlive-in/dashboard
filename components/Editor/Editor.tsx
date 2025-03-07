@@ -356,7 +356,11 @@ const XHandle = Node.create({
   },
 
   parseHTML() {
-    return [{ tag: "div[data-x-embed]" }];
+    return [
+      {
+        tag: "blockquote.twitter-tweet",
+      },
+    ];
   },
 
   renderHTML({ HTMLAttributes }) {
@@ -366,6 +370,7 @@ const XHandle = Node.create({
         "data-x-embed": true,
         style: "margin: 10px 0;",
       }),
+      
       `<blockquote class="twitter-tweet">
         <a href="${HTMLAttributes.tweetUrl}"></a>
       </blockquote>
