@@ -372,7 +372,7 @@ const XHandle = Node.create({
         "data-x-handle": true,
         style: "display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; margin: 8px 4px; background-color: #1D9BF0; color: white; border-radius: 8px; text-decoration: none; font-weight: bold;",
       }),
-      
+      `<X size={20} />`,
       `Follow on X: @haridwarlive.in`,
     ];
   },
