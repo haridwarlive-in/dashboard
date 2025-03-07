@@ -214,7 +214,7 @@ const CustomImage = Image.extend({
       "img",
       {
         ...HTMLAttributes,
-        class: "my-4 max-w-[70%] mx-auto", // Adds vertical margin (Tailwind utility for spacing)
+        class: "my-4 mx-auto", // Adds vertical margin (Tailwind utility for spacing)
       },
     ];
   },
