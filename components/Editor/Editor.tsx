@@ -238,7 +238,7 @@ export const MenuBar = ({
 const CustomVideo = Video.extend({
   renderHTML({ HTMLAttributes }) {
     return [
-      "img",
+      "video",
       {
         ...HTMLAttributes,
         class: "my-4 mx-auto", // Adds vertical margin (Tailwind utility for spacing)
@@ -280,7 +280,7 @@ const Tiptap = ({
     extensions: [
       Color.configure({ types: [TextStyle.name, ListItem.name] }),
       StarterKit,
-      Video,
+      CustomVideo,
       OrderedList,
       BulletList,
       HorizontalRule,
