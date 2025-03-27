@@ -280,7 +280,7 @@ const Tiptap = ({
     extensions: [
       Color.configure({ types: [TextStyle.name, ListItem.name] }),
       StarterKit,
-      CustomVideo,
+      Video,
       OrderedList,
       BulletList,
       HorizontalRule,
