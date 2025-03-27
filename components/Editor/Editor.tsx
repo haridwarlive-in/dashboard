@@ -88,7 +88,6 @@ const Video = Node.create({
     return [
       "video",
       mergeAttributes(HTMLAttributes, {
-        controls: true,
         class: "px-4 rounded-md my-2 space-y-2",
       }),
     ];
@@ -241,6 +240,7 @@ const CustomVideo = Video.extend({
       "video",
       {
         ...HTMLAttributes,
+        controls: true,
         class: "my-4 mx-auto", // Adds vertical margin (Tailwind utility for spacing)
       },
     ];
