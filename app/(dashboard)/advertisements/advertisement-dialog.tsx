@@ -180,7 +180,7 @@ export function AdvertisementDialog({
               type="date"
               defaultValue={formData.expiry}
               onChange={(e) => {
-                setFormData({ ...formData, expiry: e.target.value });
+                setFormData({ ...formData, expiry: new Date(e.target.value) });
               }}
               required
             />
@@ -193,7 +193,7 @@ export function AdvertisementDialog({
               type="number"
               defaultValue={formData.duration}
               onChange={(e) => {
-                setFormData({ ...formData, duration: e.target.value });
+                setFormData({ ...formData, duration: Number(e.target.value) });
               }}
               required
             />
