@@ -39,6 +39,12 @@ export function MainNav() {
       visible: admin || collaborator
     },
     {
+      label: 'Advertisements',
+      icon: Newspaper,
+      href: '/advertisements',
+      visible: admin || collaborator
+    },
+    {
       label: 'Bookings',
       icon: CheckCheck,
       href: '/bookings',
