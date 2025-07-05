@@ -103,3 +103,25 @@ export interface OwnerFormDataType {
   email: string,
   password: string
 }
+
+export interface Advertisement {
+  _id: string;
+  title: string;
+  image: string;
+  url: string;
+  key: string;
+  status: 'Archived'|'Published';
+  expiry: Date;
+  duration: Number;
+  createdAt: Date
+}
+
+export interface AdvertisementFormDataType {
+  title: string;
+  image: string;
+  url: string;
+  key: string;
+  status: 'Archived'|'Published';
+  duration: number;
+  expiry: Date
+}
